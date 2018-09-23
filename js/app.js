@@ -25,6 +25,32 @@ function shuffle(array) {
     return array;
 }
 
+var openedCards = [];
+var allCards = document.querySelectorAll('.card');
+
+allCards.forEach(function(clickedCard){
+  clickedCard.addEventListener('click', function(e) {
+    if (openedCards.length<2) {
+      clickedCard.classList.add('open', 'show');
+      openedCards.push(clickedCard);
+      console.log (openedCards.length);
+    }
+
+    if (openedCards.length>1){
+      setTimeout( function(){
+        openedCards.forEach( function(clickedCard) {
+          clickedCard.classList.remove('open', 'show');
+          openedCards = [];
+        });
+      },500);
+//    else {console.log('test');};
+    }
+  });
+});
+
+
+
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
