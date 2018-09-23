@@ -1,20 +1,15 @@
 # Memory Game Project
 
-## Table of Contents
+A project for Udacity's Front-End Web Developer Nanodegree Program by Eva "Pornubpan" Sims.
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+## How the game works
 
-## Instructions
+The play will flip open 2 cards per turn. If the cards match they will stay open, if they don't match, they'll flip back. The player wins the game when all cards are matched and opened.
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+## Project Details
 
-To get started, open `js/app.js` and start building out the app's functionality
+A timer was created to keep track of how long the player took to win the game. A moves counter and stars rating system were also created. Once the player wins the game, congratulations message and the results will show up so the player can see how well they did and how long did they take.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+When the play click "replay" or "restart" button the game will reset. Card positions will be shuffled everytime the game starts or restarts.
 
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+Feel free to check out my Github repository for this project  [HERE](https://github.com/whanipoo/memory-game).
