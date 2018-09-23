@@ -1,30 +1,6 @@
-/*
- * Create a list that holds all of your cards
- */
+//My Github repository for this project: https://github.com/whanipoo/memory-game
 
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-//Defined varibles
+//Define varibles
 var openedCards = [];
 var allCards = document.querySelectorAll('[class="card"]');
 var moves= document.querySelector('.moves');
@@ -40,9 +16,12 @@ var starResult = 3;
 var time = 0;
 let timerOn = false;
 let timerId;
+var minutes = 0;
+var seconds = 0;
+var deck = document.querySelector('.deck');
+var restart = document.querySelector('.restart');
 
-
-
+//A Function that starts timer
 function timerStart() {
     timerId = setInterval(() => {
     time++;
@@ -50,13 +29,14 @@ function timerStart() {
     displayTime();
   },1000);
 }
+
+//A Function that stops timer
 function timerStop(){
+  time=0;
   clearInterval(timerId);
 }
 
-var minutes = 0;
-var seconds = 0;
-
+//A Function that displays timer
 function displayTime(){
   var minDisplay= document.querySelector('.minutes');
   var secDisplay= document.querySelector('.seconds');
@@ -73,13 +53,42 @@ function displayTime(){
 }
 
 
+//A fuction that resets the Game
+function reset() {
+  timerStop();
+  timerOn=false;
+  time=0;
+  //Flip all opened cards back
+  openedCards.forEach(function(card) {
+    card.classList.remove('open', 'show', 'match');
+  });
+  matchedCards.forEach(function(card) {
+    card.classList.remove('open', 'show', 'match');
+  });
+  //Shuffle cards
+  for (var i = deck.children.length; i >= 0; i--) {
+    deck.appendChild(deck.children[Math.random() * i | 0]);
+  }
+  //Reset the game
+  openedCards = [];
+  matchedCards = [];
+  //Reset timer, moves counter, and stars
+  timerStop();
+  turnCount=0;
+  moves.textContent = turnCount;
+  displayTime();
 
+   allStars.forEach(function(currentstar) {
+    currentstar.classList.add('fa-star');
+    currentstar.classList.remove('fa-star-o');
+    star = allStars[2];
+  });
+}
 
+//Cards will be shuffled everytime the game starts or restarts
+reset();
 
-
-console.log("Seconds: " + seconds);
-
-
+//Setting up each card for the game
 allCards.forEach(function(clickedCard){
   clickedCard.addEventListener('click', function(e) {
 
@@ -89,14 +98,14 @@ allCards.forEach(function(clickedCard){
       openedCards.push(clickedCard);
       console.log (openedCards.length);
 
-      //Timer starts
+      //Once the first card is clicked, the timer will start
       if (timerOn==false) {
         timerStart();
         timerOn=true;
       }
     }
 
-    //If the two cards don't match, they'll flip back
+    //When two cards are opened, we will check if they macth
     if (openedCards.length>1){
       if(
         openedCards[0].firstElementChild.className ===
@@ -110,6 +119,7 @@ allCards.forEach(function(clickedCard){
         openedCards = [];
       }
 
+      //If the two cards don't match, they'll flip back
       else {
         setTimeout( function(){
           openedCards.forEach( function(clickedCard) {
@@ -118,6 +128,7 @@ allCards.forEach(function(clickedCard){
           });
         },500);
       }
+
       //Moves counter
       turnCount+=1;
       moves.textContent = turnCount;
@@ -129,26 +140,31 @@ allCards.forEach(function(clickedCard){
         star = allStars[1];
       }
 
-      //If the player matches all cards, Congratulations message will show up.
-      if (matchedCards.length == 4) {
-//
-        if(turnCount >=12) {
+      //If the player matches all cards, it will trigger the winning screen
+      if (matchedCards.length == 16) {
+        if(turnCount >=12&& turnCount<16) {
           starResult=2;
         }
         else if (turnCount >=16) {
           starResult=1;
         }
         console.log('You did it!! Congratulations!!');
-        results.textContent = 'It took you '+turnCount+ " moves, "+minutes+"."+seconds+ " minutes, and you got "+starResult+" stars. Good job!";
+        if(seconds < 10){
+          results.textContent = 'It took you '+turnCount+ " moves, "+minutes+":0"+seconds+ " minutes, and you got "+starResult+" stars. Good job!";
+        }
+        else{
+          results.textContent = 'It took you '+turnCount+ " moves, "+minutes+":"+seconds+ " minutes, and you got "+starResult+" stars. Good job!";
+        }
+
+        //Congratulations message will show up.
         setTimeout( function() {
         container.style.display="none";}, 700);
         congrats.style.display="inherit";
-        timerStop();
-        timerOn=false;
-        time=0;
 
         //Congratulations message disappear when the button is clicked.
         button.addEventListener('click', function(e) {
+          //Restart the game
+          reset();
           setTimeout( function() {
           congrats.style.display="none";}, 700);
           container.style.display="";
@@ -160,11 +176,31 @@ allCards.forEach(function(clickedCard){
 
 
 
+//Restart button
+restart.addEventListener('click', function(e) {
+  //Restart the game
+  reset();
+});
 
-//    else {console.log('test');};
 
 
 
+// Udacity comments>>
+
+// Shuffle function from http://stackoverflow.com/a/2450976
+// function shuffle(array) {
+//     var currentIndex = array.length, temporaryValue, randomIndex;
+//
+//     while (currentIndex !== 0) {
+//         randomIndex = Math.floor(Math.random() * currentIndex);
+//         currentIndex -= 1;
+//         temporaryValue = array[currentIndex];
+//         array[currentIndex] = array[randomIndex];
+//         array[randomIndex] = temporaryValue;
+//     }
+//
+//     return array;
+// }
 
 /*
  * set up the event listener for a card. If a card is clicked:
