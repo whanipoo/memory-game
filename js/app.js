@@ -27,10 +27,15 @@ function shuffle(array) {
 
 var openedCards = [];
 var allCards = document.querySelectorAll('.card');
+var moves = document.querySelector('.moves');
+var turnCount = 0;
+var allStars = document.querySelectorAll('.fa-star');
+var star = allStars[2];
+
 
 allCards.forEach(function(clickedCard){
   clickedCard.addEventListener('click', function(e) {
-    if (openedCards.length<2) {
+    if (openedCards.length<2 && !openedCards.includes(clickedCard)) {
       clickedCard.classList.add('open', 'show');
       openedCards.push(clickedCard);
       console.log (openedCards.length);
@@ -43,11 +48,20 @@ allCards.forEach(function(clickedCard){
           openedCards = [];
         });
       },500);
-//    else {console.log('test');};
+
+      turnCount+=1;
+      moves.textContent = turnCount;
+      if(turnCount==12||turnCount==16) {
+        star.classList.remove('fa-star');
+        star.classList.add('fa-star-o');
+        star = allStars[1];
+      }
+
     }
   });
 });
 
+//    else {console.log('test');};
 
 
 
