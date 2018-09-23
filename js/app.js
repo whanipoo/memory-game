@@ -24,33 +24,52 @@ function shuffle(array) {
 
     return array;
 }
-
+//Defined varibles
 var openedCards = [];
-var allCards = document.querySelectorAll('.card');
+var allCards = document.querySelectorAll('[class="card"]');
 var moves = document.querySelector('.moves');
 var turnCount = 0;
 var allStars = document.querySelectorAll('.fa-star');
 var star = allStars[2];
+var matchedCards = [];
 
 
 allCards.forEach(function(clickedCard){
   clickedCard.addEventListener('click', function(e) {
-    if (openedCards.length<2 && !openedCards.includes(clickedCard)) {
+    //Flipping the card that was clicked
+    if (openedCards.length<2 && !openedCards.includes(clickedCard) && !matchedCards.includes(clickedCard) ) {
       clickedCard.classList.add('open', 'show');
       openedCards.push(clickedCard);
       console.log (openedCards.length);
     }
 
+    //If the two cards don't match, they'll flip back
     if (openedCards.length>1){
-      setTimeout( function(){
-        openedCards.forEach( function(clickedCard) {
-          clickedCard.classList.remove('open', 'show');
-          openedCards = [];
-        });
-      },500);
+      if(
+        openedCards[0].firstElementChild.className ===
+        openedCards[1].firstElementChild.className
+      ) {
+        openedCards[0].classList.remove('open', 'show');
+        openedCards[0].classList.add('match');
+        openedCards[1].classList.remove('open', 'show');
+        openedCards[1].classList.add('match');
+        matchedCards.push(openedCards[0],openedCards[1]);
+        openedCards = [];
+      }
 
+      else {
+        setTimeout( function(){
+          openedCards.forEach( function(clickedCard) {
+            clickedCard.classList.remove('open', 'show');
+            openedCards = [];
+          });
+        },500);
+      }
+      //Moves counter
       turnCount+=1;
       moves.textContent = turnCount;
+
+      // Star rating
       if(turnCount==12||turnCount==16) {
         star.classList.remove('fa-star');
         star.classList.add('fa-star-o');
