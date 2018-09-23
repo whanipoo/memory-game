@@ -27,20 +27,73 @@ function shuffle(array) {
 //Defined varibles
 var openedCards = [];
 var allCards = document.querySelectorAll('[class="card"]');
-var moves = document.querySelector('.moves');
+var moves= document.querySelector('.moves');
 var turnCount = 0;
 var allStars = document.querySelectorAll('.fa-star');
 var star = allStars[2];
 var matchedCards = [];
+var container = document.querySelector('.container');
+var congrats = document.querySelector('.congrats');
+var results = document.querySelector('.results');
+var button = document.querySelector('button');
+var starResult = 3;
+var time = 0;
+let timerOn = false;
+let timerId;
+
+
+
+function timerStart() {
+    timerId = setInterval(() => {
+    time++;
+    console.log(time);
+    displayTime();
+  },1000);
+}
+function timerStop(){
+  clearInterval(timerId);
+}
+
+var minutes = 0;
+var seconds = 0;
+
+function displayTime(){
+  var minDisplay= document.querySelector('.minutes');
+  var secDisplay= document.querySelector('.seconds');
+  minutes = Math.floor(time/60);
+  seconds = time%60;
+  minDisplay.textContent = minutes;
+  if(seconds < 10){
+    secDisplay.textContent = '0'+seconds;
+  }
+  else{
+    secDisplay.textContent = seconds;
+  }
+
+}
+
+
+
+
+
+
+console.log("Seconds: " + seconds);
 
 
 allCards.forEach(function(clickedCard){
   clickedCard.addEventListener('click', function(e) {
+
     //Flipping the card that was clicked
     if (openedCards.length<2 && !openedCards.includes(clickedCard) && !matchedCards.includes(clickedCard) ) {
       clickedCard.classList.add('open', 'show');
       openedCards.push(clickedCard);
       console.log (openedCards.length);
+
+      //Timer starts
+      if (timerOn==false) {
+        timerStart();
+        timerOn=true;
+      }
     }
 
     //If the two cards don't match, they'll flip back
@@ -76,9 +129,37 @@ allCards.forEach(function(clickedCard){
         star = allStars[1];
       }
 
+      //If the player matches all cards, Congratulations message will show up.
+      if (matchedCards.length == 4) {
+//
+        if(turnCount >=12) {
+          starResult=2;
+        }
+        else if (turnCount >=16) {
+          starResult=1;
+        }
+        console.log('You did it!! Congratulations!!');
+        results.textContent = 'It took you '+turnCount+ " moves, "+minutes+"."+seconds+ " minutes, and you got "+starResult+" stars. Good job!";
+        setTimeout( function() {
+        container.style.display="none";}, 700);
+        congrats.style.display="inherit";
+        timerStop();
+        timerOn=false;
+        time=0;
+
+        //Congratulations message disappear when the button is clicked.
+        button.addEventListener('click', function(e) {
+          setTimeout( function() {
+          congrats.style.display="none";}, 700);
+          container.style.display="";
+        });
+      }
     }
   });
 });
+
+
+
 
 //    else {console.log('test');};
 
