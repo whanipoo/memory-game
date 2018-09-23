@@ -165,8 +165,7 @@ allCards.forEach(function(clickedCard){
         button.addEventListener('click', function(e) {
           //Restart the game
           reset();
-          setTimeout( function() {
-          congrats.style.display="none";}, 700);
+          congrats.style.display="none";
           container.style.display="";
         });
       }
